@@ -1,0 +1,96 @@
+{% extends 'index.html' %}
+
+   {% block content %}
+      <div class="page-content-product">
+         <div class="main-product">
+            <div class="container">
+               <div class="row clearfix">
+                  <div class="find-box">
+                     <div class="product-sh">
+                        <div class="col-sm-6">
+                           <div class="form-sh">
+                              <input type="text" placeholder="Search something to read..." >
+                           </div>
+                        </div>
+                        <div class="col-sm-3">
+                           <div class="form-sh">
+                              <select class="selectpicker">
+                                 {% for genre in genres %}
+                                    <option>{{ genre }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
+                        </div>
+                        <div class="col-sm-3">
+                           <div class="form-sh"> <a class="btn" href="#">Search</a> </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+<!--     tělo s knihami          -->
+               <br>
+               {% for author in authors %}
+               <div class="row justify-content-start">
+                  <div class="col-sm-3">
+                  </div>
+
+                  <div class="col-sm-3">
+                     <h4 style="color: wheat">{{ author.name }}</h4>
+                  </div>
+
+               </div>
+               {% endfor %}
+
+<!--     Paginator          -->
+               <hr>
+
+               <div class="row justify-content-start">
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-2">
+                      {% if authors.has_previous %}
+                        <a href="?page={{ authors.previous_page_number }}">Previous</a>
+                      {% endif %}
+                    </div>
+                    <div class="col-sm-3">
+                      {% if authors.number > 10 %}
+                        <a href="?page=1">1</a>
+                        <span class="ellipsis">...</span>
+                      {% endif %}
+                      {% for i in authors.paginator.page_range %}
+                        {% if books.number == i %}
+                          <span class="current-page">{{ i }}</span>
+                        {% elif i > authors.number|add:'-5' and i < authors.number|add:'5' %}
+                          <a href="?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                      {% endfor %}
+                      {% if authors.number < authors.paginator.num_pages|add:'-10' %}
+                        <span class="ellipsis">...</span>
+                        <a href="?page={{ books.paginator.num_pages }}">{{ authors.paginator.num_pages }}</a>
+                      {% endif %}
+                    </div>
+                    <div class="col-sm-2">
+                      {% if authors.has_next %}
+                        <a href="?page={{ authors.next_page_number }}">Next</a>
+                      {% endif %}
+                    </div>
+
+               </div>
+
+               <br>
+               <br>
+               <div class="categories_link">-->
+                     <a href="#">Browse all categories here</a>
+               </div>
+
+
+            </div>
+         </div>
+      </div>
+
+   {% endblock content %}
+
+
+   {% block newscontent%}
+
+   {% endblock newscontent %}

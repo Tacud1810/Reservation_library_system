@@ -1,0 +1,76 @@
+{% extends 'index.html' %}
+
+   {% block content %}
+      <div class="page-content-product">
+         <div class="main-product">
+            <div class="container">
+               <div class="row clearfix">
+                  <div class="find-box">
+                     <div class="product-sh">
+                        <div class="col-sm-6">
+                           <div class="form-sh">
+                              <input type="text" placeholder="Search something to read..." >
+                           </div>
+                        </div>
+                        <div class="col-sm-3">
+                           <div class="form-sh">
+                              <select class="selectpicker">
+                                 {% for genre in genres %}
+                                    <option>{{ genre }}</option>
+                                 {% endfor %}
+                              </select>
+                           </div>
+                        </div>
+                        <div class="col-sm-3">
+                           <div class="form-sh"> <a class="btn" href="#">Search</a> </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+<!--     tělo s knihami          -->
+               <div class="row clearfix">
+               {% for book in new_books %}
+
+                  <div class="col-lg-2">
+
+                        <div class="box-img">
+                           <a href="{% url 'book' book.id %}">
+                           <div class="image-wrapper">
+                              <img class="book-image" src="{{ book.image_url }}" alt="" />
+                           </div>
+                           </a>
+                           {% if book.name|length > 15 %}
+                              <h4>{{ book.name|slice:":12" }}...</h4>
+                           {% else %}
+                              <h4>{{ book.name }}</h4>
+                           {% endif %}
+                           <hr>
+                           <div class="button">
+                              {% if book.amount > 0 %}
+                                 <button> Vypůjčit </button>
+                              {% else %}
+                                 <button> Rezervovat </button>
+                              {% endif %}
+                           </div>
+                        </div>
+
+                  </div>
+
+
+                  {% endfor %}
+               </div>
+               <div class="categories_link">-->
+                     <a href="#">Browse all categories here</a>
+               </div>
+
+
+            </div>
+         </div>
+      </div>
+
+   {% endblock content %}
+
+
+   {% block newscontent%}
+
+   {% endblock newscontent %}

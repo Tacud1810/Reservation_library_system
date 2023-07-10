@@ -1,0 +1,65 @@
+{% extends 'index.html' %}
+
+   {% block content %}
+      <div class="page-content-product">
+         <div class="main-product">
+            <div class="container">
+               <div class="row clearfix">
+                  <div class="find-box">
+                     <h1>Order summary:</h1>
+                  </div>
+                <!--     tělo s objednávkou          -->
+               <br>
+               <h4 style="color: #fff;">for order:</h4>
+                  <hr>
+               {% for item in items %}
+               <div class="row clearfix">
+                   <div class = "col-sm-1" style="color: wheat"><img class="row-image" style="width: 50px" src="{{ item.book.image_url }}"></div>
+                  <div class = "col-sm-3" style="color: wheat;">{{ item.book.get_author }}</div>
+                  <div class = "col-sm-3" style="color: wheat;">{{ item.book.name }}</div>
+
+               </div>
+               {% endfor %}
+               <div class="row clearfix">
+                   <div class = "col-sm-5"></div>
+                   <div class = "col-sm-2" style="color: wheat;">celkem</div>
+
+               </div>
+               <h4 style="color: #fff;">for reservation:</h4>
+                  <hr>
+                  <div class="row clearfix">
+                   <div class = "col-sm-1" style="color: wheat"><img class="row-image" style="width: 50px" src="../images/big_mesto-spiny-647868596cefc.jpg"></div>
+                   <div class = "col-sm-3" style="color: wheat;">název knihy</div>
+
+                  </div>
+               <div class="row clearfix">
+                   <div class = "col-sm-5"></div>
+                   <div class = "col-sm-2" style="color: wheat;">celkem</div>
+
+               </div>
+               <br>
+               <br>
+               <div class="row clearfix">
+                  <div class = "col-sm-3">
+                     <a href="{% url 'home' %}">
+                     <button>Back to library</button>
+                     </a>
+                  </div>
+                  <div class = "col-sm-6"></div>
+                  <div class = "col-sm-3">
+                     <a href="{% url 'order_done' %}">
+                     <button>Finish</button>
+                     </a>
+                  </div>
+               </div>
+
+            </div>
+         </div>
+      </div>
+
+   {% endblock content %}
+
+
+   {% block newscontent%}
+
+   {% endblock newscontent %}
