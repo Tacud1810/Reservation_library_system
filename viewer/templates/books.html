@@ -46,12 +46,14 @@
                            {% endif %}
                            <hr>
                            <div class="button">
-                              {% if book.amount > 0 %}
-                                 <button> Vypůjčit </button>
-                              {% else %}
-                                 <button> Rezervovat </button>
-                              {% endif %}
-                           </div>
+                            <button data-book={{book.id}} data-action="add" class="update-cart">
+                               {% if book.amount > 0 %}
+                                 Vypůjčit
+                               {% else %}
+                                 Rezervovat
+                               {% endif %}
+                            </button>
+                     </div>
                         </div>
 
                   </div>

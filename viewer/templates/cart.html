@@ -17,6 +17,13 @@
                    <div class = "col-sm-1" style="color: wheat"><img class="row-image" style="width: 50px" src="{{ item.book.image_url }}"></div>
                   <div class = "col-sm-3" style="color: wheat;">{{ item.book.get_author }}</div>
                   <div class = "col-sm-3" style="color: wheat;">{{ item.book.name }}</div>
+                  <div class = "col-sm-3">
+                     <div class="button">
+                            <button data-book={{item.book.id}} data-action="remove" class="update-cart">
+                               remove
+                            </button>
+                     </div>
+                  </div>
 
                </div>
                {% endfor %}

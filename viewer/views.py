@@ -1,7 +1,9 @@
 from django import forms
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+import json
 
 from .models import *
 
@@ -32,7 +34,7 @@ def new_books(request):
 	else:
 		items = []
 		order = {'get_cart_items': 0}
-	context = {'new_books': book_list, 'genres': genres_list,'items': items, 'order': order}
+	context = {'new_books': book_list, 'genres': genres_list, 'items': items, 'order': order}
 	return render(request, template_name='index.html', context=context)
 
 
@@ -92,3 +94,25 @@ def cart(request):
 		order = {'get_cart_items': 0}
 	context = {'items': items, 'order': order}
 	return render(request, 'cart.html', context)
+
+
+def update_item(request):
+	data = json.loads(request.body)
+	book_id = data['bookId']
+	action = data['action']
+
+	print('Action: ', action)
+	print('bookId: ', book_id)
+
+	customer = request.user.person
+	book = Book.objects.get(id=book_id)
+	print(book)
+	order, created = Order.objects.get_or_create(user=customer, complete=False)
+
+	order_item, created = OrderItem.objects.get_or_create(cart=order, book=book)
+
+	order_item.save()
+	if action == 'remove':
+		order_item.delete()
+
+	return JsonResponse('Item was added', safe=False)

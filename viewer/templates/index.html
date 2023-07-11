@@ -21,6 +21,27 @@
       <link rel="stylesheet" href="{% static 'viewer/css/slick.min.css' %}">
       <!--responsive css-->
       <link rel="stylesheet" href="{% static 'viewer/css/responsive.css' %}">
+      <script type="text/javascript">
+          var user = '{{request.user}}'
+          function getToken(name) {
+             let cookieValue = null;
+             if (document.cookie && document.cookie !== '') {
+                 const cookies = document.cookie.split(';');
+                 for (let i = 0; i < cookies.length; i++) {
+                     const cookie = cookies[i].trim();
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+         const csrftoken = getToken('csrftoken');
+
+      </script>
+
    </head>
    <body>
       <header id="header" class="top-head">
@@ -153,11 +174,13 @@
                            {% endif %}
                            <hr>
                            <div class="button">
-                              {% if book.amount > 0 %}
-                                 <button> Vypůjčit </button>
-                              {% else %}
-                                 <button> Rezervovat </button>
-                              {% endif %}
+                            <button data-book={{book.id}} data-action="add" class="update-cart">
+                               {% if book.amount > 0 %}
+                                 Vypůjčit
+                               {% else %}
+                                 Rezervovat
+                               {% endif %}
+                            </button>
                            </div>
                         </div>
 
@@ -680,5 +703,6 @@
       <script src="{% static 'viewer/js/wow.min.js' %}"></script>
       <!--custom js--> 
       <script src="{% static 'viewer/js/custom.js' %}"></script>
+      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
    </body>
 </html>

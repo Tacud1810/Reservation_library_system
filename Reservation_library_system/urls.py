@@ -30,6 +30,7 @@ urlpatterns = [
 
     path("cart/", cart, name='cart'),
     path("order_done/", order_done, name='order_done'),
+    path("update_item/", update_item, name='update_item'),
 
 ]
 
