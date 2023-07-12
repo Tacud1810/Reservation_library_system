@@ -5,7 +5,7 @@
 
    <head>
       <meta charset="UTF-8">
-      <title>Chamb - Responsive E-commerce HTML5 Template</title>
+      <title>Reservation library system </title>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <!--enable mobile device-->
       <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,9 +70,14 @@
                         <div class="login-sr">
                            <div class="login-signup">
                               <ul>
-                                 <li><a href="#">Login</a></li>
-                                 <li><a class="custom-b" href="#">Sign up</a></li>
-                                 <li><a href="{% url 'cart' %}">Košík: <p style="display: inline; color: red">{{order.total_items }} books</p></a></li>
+                                 {% if user.is_authenticated %}
+                                    <li><a href="#">User: {{user}}</a></li>
+                                    <li style="border-right: 1px solid #dcdcdc;"><a href="#">Logout</a></li>
+                                    <li><a href="{% url 'cart' %}">Basket: <p style="display: inline; color: red">{{order.total_items }} books</p></a></li>
+                                 {% else %}
+                                    <li><a href="#">Login</a></li>
+                                    <li><a class="custom-b" href="#">Sign up</a></li>
+                                 {% endif %}
                               </ul>
                            </div>
                         </div>
@@ -173,15 +178,19 @@
                               <h4>{{ book.name }}</h4>
                            {% endif %}
                            <hr>
+                           {% if user.is_authenticated %}
                            <div class="button">
-                            <button data-book={{book.id}} data-action="add" class="update-cart">
-                               {% if book.amount > 0 %}
-                                 Vypůjčit
-                               {% else %}
-                                 Rezervovat
-                               {% endif %}
-                            </button>
+                              {% if book.amount > 0 %}
+                                 <button data-book={{book.id}} data-action="add" class="update-cart">
+                                    To borrow
+                                 </button>
+                              {% else %}
+                                 <button data-book={{book.id}} data-action="reserve" class="update-cart">
+                                    Reserve
+                                 </button>
+                              {% endif %}
                            </div>
+                           {% endif %}
                         </div>
 
                   </div>
@@ -195,74 +204,6 @@
                      <a href="#">Browse all categories here</a>
                </div>
 
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/1.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/2.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/4.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/5.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/10.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/11.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/12.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="col-lg-3 col-sm-6 col-md-3">-->
-<!--                     <a href="productpage.html">-->
-<!--                        <div class="box-img">-->
-<!--                           <h4>Product</h4>-->
-<!--                           <img src="{% static 'viewer/images/product/13.png' %}" alt="" />-->
-<!--                        </div>-->
-<!--                     </a>-->
-<!--                  </div>-->
-<!--                  <div class="categories_link">-->
-<!--                     <a href="#">Browse all categories here</a>-->
-<!--                  </div>-->
-<!--               </div>-->
 <!--     konec těla s knihami          -->
 
             </div>
@@ -312,266 +253,7 @@
          </div>
       </div>
    {% endblock newscontent %}
-<!--      <div class="products_exciting_box">-->
-<!--         <div class="container">-->
-<!--            <div class="row">-->
-<!--               <div class="col-md-6 col-sm-6 wow fadeIn" data-wow-delay="0.2s">-->
-<!--                  <div class="exciting_box f_pd">-->
-<!--                     <img src="{% static 'viewer/images/exciting_img-01.jpg' %}" class="icon-small" alt="" />-->
-<!--                     <h4>Explore <strong>exciting</strong> and exotic products-->
-<!--                        tailored to you.-->
-<!--                     </h4>-->
-<!--                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod -->
-<!--                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, -->
-<!--                        quis nostrud exercitation ullamco laboris..-->
-<!--                     </p>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--               <div class="col-md-6 col-sm-6 wow fadeIn" data-wow-delay="0.4s">-->
-<!--                  <div class="exciting_box l_pd">-->
-<!--                     <img src="{% static 'viewer/images/exciting_img-02.jpg' %}" class="icon-small" alt="" />-->
-<!--                     <h4><strong>List your products on</strong> chamb and grow connections.</h4>-->
-<!--                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod -->
-<!--                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, -->
-<!--                        quis nostrud exercitation ullamco laboris..-->
-<!--                     </p>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-<!--         </div>-->
-<!--      </div>-->
-<!--      <div class="start-free-box">-->
-<!--         <div class="container">-->
-<!--            <div class="row">-->
-<!--               <div class="container">-->
-<!--                  <div class="main-start-box">-->
-<!--                     <div class="free-box-a clearfix">-->
-<!--                        <div class="col-md-6 col-sm-6">-->
-<!--                           <div class="left-a-f">-->
-<!--                              <h3>A platform built for scale & expansion. Start for free.</h3>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6 col-sm-6">-->
-<!--                           <div class="right-a-f">-->
-<!--                              <p>Over the comming years, way thet business through the web-->
-<!--                                 works will change at agreat - and chamb is the-->
-<!--                                 gamebreaker.-->
-<!--                              </p>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-<!--            <div class="row">-->
-<!--               <div class="main-start-box">-->
-<!--                  <div class="bg_img_left"><img src="{% static 'viewer/images/bg_img1.png' %}" alt="#" /></div>-->
-<!--                  <div class="container">-->
-<!--                     <div class="buyer-box clearfix">-->
-<!--                        <div class="col-md-6 col-sm-6 wow fadeIn" data-wow-delay="0.2s">-->
-<!--                           <div class="left-buyer">-->
-<!--                              <img class="img-responsive" src="{% static 'viewer/images/creat_pro.png' %}" alt="#" />-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-6 col-sm-6 wow fadeIn" data-wow-delay="0.4s">-->
-<!--                           <div class="right-buyer">-->
-<!--                              <h4>buyer</h4>-->
-<!--                              <h2>Empower your factory<br>-->
-<!--                                 <span>With a new lead Channel</span>-->
-<!--                              </h2>-->
-<!--                              <p>Never worry about sales or income ftom outbound-->
-<!--                                 channels. with chamb your store is directly-->
-<!--                                 connected to thousands of interested in your-->
-<!--                                 products.-->
-<!--                              </p>-->
-<!--                              <a href="#">Create a buyer account</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-<!--            <div class="row">-->
-<!--               <div class="bg_img_right"><img src="{% static 'viewer/images/bg_img1.png' %}" alt="#" /></div>-->
-<!--               <div class="main-start-box">-->
-<!--                  <div class="container">-->
-<!--                     <div class="supplier clearfix">-->
-<!--                        <div class="col-md-5 col-sm-6">-->
-<!--                           <div class="left-supplier">-->
-<!--                              <h4>supplier</h4>-->
-<!--                              <h2>Grow your store <br><span>With a new sales channel</span></h2>-->
-<!--                              <p>Never worry about sales or income ftom outbound-->
-<!--                                 channels. with chamb your store is directly-->
-<!--                                 connected to thousands of interested in your-->
-<!--                                 products.-->
-<!--                              </p>-->
-<!--                              .-->
-<!--                              <a href="#">Create a supplier account</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-md-7 col-sm-6">-->
-<!--                           <div class="right-supplier">-->
-<!--                              <img class="img-responsive" src="{% static 'viewer/images/supplier-pc-img.png' %}" alt="#" />-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-<!--         </div>-->
-<!--      </div>-->
 
-<!--      rolovací seznam nejpoužívanějších -->
-
-<!--      <div class="products">-->
-<!--         <div class="main-products">-->
-<!--            <h2>TRENDING PRODUCTS ON CHAMB</h2>-->
-<!--            <div class="product-slidr">-->
-<!--               <div class="slider">-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr1.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Table with Lights</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr2.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Treehouse Bed</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr3.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Wood Sofaplatform</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr4.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Wall Sticker</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr1.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Treehouse Bed</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr2.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Treehouse Bed</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--                  <div>-->
-<!--                     <div class="prod-box">-->
-<!--                        <div class="prod-i">-->
-<!--                           <img src="{% static 'viewer/images/tr3.png' %}" alt="#" />-->
-<!--                        </div>-->
-<!--                        <div class="prod-dit clearfix">-->
-<!--                           <div class="dit-t clearfix">-->
-<!--                              <div class="left-ti">-->
-<!--                                 <h4>Treehouse Bed</h4>-->
-<!--                                 <p>By <span>Beko</span> under <span>Lights</span></p>-->
-<!--                              </div>-->
-<!--                              <a href="#">$1220</a>-->
-<!--                           </div>-->
-<!--                           <div class="dit-btn clearfix">-->
-<!--                              <a class="wis" href="#"><i class="fa fa-star" aria-hidden="true"></i> Save to wishlist </a>-->
-<!--                              <a class="thi" href="#"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like this</a>-->
-<!--                           </div>-->
-<!--                        </div>-->
-<!--                     </div>-->
-<!--                  </div>-->
-<!--               </div>-->
-<!--            </div>-->
-<!--         </div>-->
-<!--      </div>-->
       <footer>
          <div class="main-footer">
             <div class="container">

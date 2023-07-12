@@ -29,7 +29,7 @@
                </div>
 <!--     tělo s knihami          -->
                <div class="row clearfix">
-               {% for book in new_books %}
+               {% for book in books %}
 
                   <div class="col-lg-2">
 
@@ -45,7 +45,8 @@
                               <h4>{{ book.name }}</h4>
                            {% endif %}
                            <hr>
-                           <div class="button">
+                           {% if user.is_authenticated %}
+                     <div class="button">
                             <button data-book={{book.id}} data-action="add" class="update-cart">
                                {% if book.amount > 0 %}
                                  Vypůjčit
@@ -54,6 +55,9 @@
                                {% endif %}
                             </button>
                      </div>
+                     {% else %}
+
+                     {% endif %}
                         </div>
 
                   </div>

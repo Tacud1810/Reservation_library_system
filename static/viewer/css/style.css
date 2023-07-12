@@ -291,16 +291,16 @@ header .navbar-default .navbar-header {
 
 .right-nav {
 	float: right;
-	padding-right: 10px;
+	padding-right: 13px;
 }
 
 .login-sr {
 	float: right;
-	margin-left: 15px;
+	margin-left: 00px;
 }
 
 .login-signup {
-	padding: 13px 0px;
+	padding: 10px 0px;
 }
 
 .login-signup ul {

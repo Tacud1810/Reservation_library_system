@@ -87,6 +87,7 @@ class Order(models.Model):
 	user = models.ForeignKey(Person, on_delete=CASCADE)
 	created_at = models.DateTimeField(auto_now_add=True)
 	complete = models.BooleanField(default=False, null=True, blank=True)
+	borrowed = models.BooleanField(default=False, null=True, blank=True)
 
 	def __str__(self):
 		return f"{self.user} - {self.id}"
@@ -113,6 +114,20 @@ class Rented(models.Model):
 	rent_date = models.DateField(blank=True)
 	reservation_date = models.DateField(auto_now_add=True)
 	return_date = models.DateField(blank=True)
+	returned = models.BooleanField(default=False, null=True, blank=True)
+
+	class Meta:
+		verbose_name_plural = "Rented"
+
+
+class Reserved(models.Model):
+	id_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True, default=None)
+	id_user = models.ForeignKey(Person, on_delete=models.SET_NULL, null=True, blank=True, default=None)
+	reservation_date = models.DateField(auto_now_add=True)
+	email_sent = models.BooleanField(default=False, null=True, blank=True)
+
+	class Meta:
+		verbose_name_plural = "Reserved"
 
 
 class Rating(models.Model):

@@ -24,6 +24,8 @@ from viewer.views import *
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", new_books, name='home'),
+    path("index/", new_books, name='home'),
+
     path("book/<pk>/", book, name='book'),
     path("books_page/", books_page, name='books_page'),
     path("authors/", AuthorsView.as_view(), name='authors'),

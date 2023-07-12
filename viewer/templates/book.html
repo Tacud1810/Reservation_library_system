@@ -50,20 +50,22 @@
                            </div>
                         </div>
                      </div>
+<!--                        Book information  -->
                      <div class="description-box">
                         <div class="dex-a">
-                           <h4>Popis děje</h4>
+                           <h4>Description</h4>
 
                            <p>{{ book.description }}
                            </p>
                            <hr>
                         </div>
+
                         <div class="spe-a">
-                           <h4>Informace</h4>
+                           <h4>Information</h4>
                            <ul>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>Originální název</h5>
+                                    <h5>Original name</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{{ book.original_name }}</p>
@@ -71,7 +73,7 @@
                               </li>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>Rok</h5>
+                                    <h5>Year</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{{ book.year }}</p>
@@ -79,7 +81,7 @@
                               </li>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>Žánr</h5>
+                                    <h5>Genre</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{% for genre in genres %} {{ genre }}, {% endfor %}</p>
@@ -87,7 +89,7 @@
                               </li>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>Počet stran</h5>
+                                    <h5>Pages</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{{book.page}}</p>
@@ -95,7 +97,7 @@
                               </li>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>Jazyk</h5>
+                                    <h5>Language</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{{ book.get_language }}</p>
@@ -111,7 +113,7 @@
                               </li>
                               <li class="clearfix">
                                  <div class="col-md-4">
-                                    <h5>K vypůjčení</h5>
+                                    <h5>To borrow</h5>
                                  </div>
                                  <div class="col-md-8">
                                     <p>{% if book.amount > 0 %} ANO {% else %} NE {% endif %}</p>
@@ -119,7 +121,25 @@
                               </li>
                            </ul>
                         </div>
+<!--              End of book information          -->
+<!--              Comments          -->
+
+                     <div><h4>Comments:</h4>
+                        <br>
+                        <br>
+                        <br>
+                        <br>
+                        Coments
                      </div>
+
+                     </div>
+
+
+
+
+
+
+<!--              End of comments          -->
                   </div>
 <!--     Podobné knihy             -->
                   <div class="similar-box">
@@ -184,15 +204,21 @@
 <!--     Boční panel          -->
                <div class="col-md-3 col-sm-12">
                   <div class="price-box-right">
+                     {% if user.is_authenticated %}
                      <div class="button">
-                            <button data-book={{book.id}} data-action="add" class="update-cart">
-                               {% if book.amount > 0 %}
-                                 Vypůjčit
-                               {% else %}
-                                 Rezervovat
-                               {% endif %}
-                            </button>
+                        {% if book.amount > 0 %}
+                           <button data-book={{book.id}} data-action="add" class="update-cart">
+                              To borrow
+                           </button>
+                        {% else %}
+                           <button data-book={{book.id}} data-action="reserve" class="update-cart">
+                               Reserve
+                           </button>
+                        {% endif %}
                      </div>
+                     {% else %}
+                     <h4>You have to log in to borrow</h4>
+                     {% endif %}
                   </div>
                </div>
 <!--     Konec bočního panelu          -->

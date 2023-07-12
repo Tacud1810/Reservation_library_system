@@ -1,72 +1,93 @@
 {% extends 'index.html' %}
 
-   {% block content %}
-      <div class="page-content-product">
-         <div class="main-product">
-            <div class="container">
-               <div class="row clearfix">
-                  <div class="find-box">
-                     <h1>Order summary:</h1>
-                  </div>
-                <!--     tělo s objednávkou          -->
-               <br>
-               <h4 style="color: #fff;">for order:</h4>
-                  <hr>
-               {% for item in items %}
-               <div class="row clearfix">
-                   <div class = "col-sm-1" style="color: wheat"><img class="row-image" style="width: 50px" src="{{ item.book.image_url }}"></div>
-                  <div class = "col-sm-3" style="color: wheat;">{{ item.book.get_author }}</div>
-                  <div class = "col-sm-3" style="color: wheat;">{{ item.book.name }}</div>
-                  <div class = "col-sm-3">
-                     <div class="button">
-                            <button data-book={{item.book.id}} data-action="remove" class="update-cart">
-                               remove
-                            </button>
-                     </div>
-                  </div>
-
+{% block content %}
+<div class="page-content-product">
+   <div class="main-product">
+      <div class="container">
+         <h4 class="row clearfix">
+            <div class="find-box">
+               <h1>Order summary:</h1>
+            </div>
+            <!--     tělo s objednávkou          -->
+            <br>
+            {% if order.total_items > 0 %}
+            <h4 style="color: #fff;">for order:</h4>
+            <hr>
+            {% for item in items %}
+            <div class="row clearfix">
+               <div class="col-sm-1" style="color: wheat">
+                  <a href="{% url 'book' item.book.id %}"> <img class="row-image" style="width: 50px"
+                                                                src="{{ item.book.image_url }}"></a>
                </div>
-               {% endfor %}
-               <div class="row clearfix">
-                   <div class = "col-sm-5"></div>
-                   <div class = "col-sm-2" style="color: wheat;">celkem</div>
-
-               </div>
-               <h4 style="color: #fff;">for reservation:</h4>
-                  <hr>
-                  <div class="row clearfix">
-                   <div class = "col-sm-1" style="color: wheat"><img class="row-image" style="width: 50px" src="../images/big_mesto-spiny-647868596cefc.jpg"></div>
-                   <div class = "col-sm-3" style="color: wheat;">název knihy</div>
-
-                  </div>
-               <div class="row clearfix">
-                   <div class = "col-sm-5"></div>
-                   <div class = "col-sm-2" style="color: wheat;">celkem</div>
-
-               </div>
-               <br>
-               <br>
-               <div class="row clearfix">
-                  <div class = "col-sm-3">
-                     <a href="{% url 'home' %}">
-                     <button>Back to library</button>
-                     </a>
-                  </div>
-                  <div class = "col-sm-6"></div>
-                  <div class = "col-sm-3">
-                     <a href="{% url 'order_done' %}">
-                     <button>Finish</button>
-                     </a>
+               <div class="col-sm-2" style="color: wheat;">{{ item.book.get_author }}</div>
+               <div class="col-sm-2" style="color: wheat;">{{ item.book.name }}</div>
+               <div class="col-sm-3">
+                  <div class="button">
+                     <button data-book={{item.book.id}} data-action="remove" class="update-cart"
+                             style="font-size: 70%; color: red">
+                        remove
+                     </button>
                   </div>
                </div>
 
             </div>
-         </div>
+            {% endfor %}
+            <hr>
+            <div class="row clearfix">
+
+               <div class="col-sm-5"></div>
+               <div class="col-sm-2" style="color: wheat;">total: {{order.total_items }} books</div>
+            </div>
+
+            {% else %}
+            <h4 style="color: #fff;">Your basket is empty.</h4>
+            {% endif %}
+
+
+            <br>
+            <br>
+            <div class="row clearfix">
+               <div class="col-sm-3">
+                  <a href="{% url 'home' %}">
+                     <button>Back to library</button>
+                  </a>
+               </div>
+               <div class="col-sm-6"></div>
+               {% if order.total_items > 0%}
+               <div class="col-sm-3">
+                  <a href="#">
+                     <button id="finish-button">Finish</button>
+                  </a>
+               </div>
+               {% endif %}
+            </div>
+
       </div>
+   </div>
+</div>
 
-   {% endblock content %}
+<script>
+    var form = document.getElementById('finish-button').addEventListener('click', function(e){
+        submitOrder()
+    })
+    function submitOrder(){
+        console.log('Finish button clicked')
+
+        var url = '/order_done/'
+        fetch(url, {redirect: "manual"})
+        .then((response) => response.json())
+        {
+            window.location.href = "/order_done/"
+        }
 
 
-   {% block newscontent%}
+    }
 
-   {% endblock newscontent %}
+</script>
+
+{% endblock content %}
+
+
+{% block newscontent%}
+
+{% endblock newscontent %}

@@ -1,1 +1,37 @@
-Objednávka hotova :)
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="page-content-product">
+   <div class="main-product">
+      <div class="container">
+         <h4 class="row clearfix">
+            <div class="find-box">
+               <h1>Objednávka hotova</h1>
+            </div>
+
+
+
+            <br>
+            <br>
+            <div class="row clearfix">
+               <div class="col-sm-3">
+                  <a href="{% url 'home' %}">
+                     <button>Back to library</button>
+                  </a>
+               </div>
+               <div class="col-sm-6"></div>
+
+            </div>
+
+      </div>
+   </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+{% block newscontent%}
+
+{% endblock newscontent %}

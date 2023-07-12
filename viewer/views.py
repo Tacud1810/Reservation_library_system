@@ -20,7 +20,14 @@ def book(request, pk):
 	genre = Genre.objects.filter(genres=book)
 	genre_ids = genre.values_list('id', flat=True)
 	similars = Book.objects.filter(genre__in=genre_ids).exclude(id=pk).order_by('?').distinct()[:4]
-	context = {'book': book, 'genres': genre, 'similars': similars}
+	if request.user.is_authenticated:
+		customer = request.user.person
+		order, created = Order.objects.get_or_create(user=customer, complete=False)
+		items = order.orderitem_set.all()
+	else:
+		items = []
+		order = {'get_cart_items': 0}
+	context = {'book': book, 'genres': genre, 'similars': similars, 'items': items, 'order': order}
 	return render(request, template_name='book.html', context=context)
 
 
@@ -41,7 +48,14 @@ def new_books(request):
 def books_page(request):
 	book_list = Book.objects.all().order_by('-id')
 	genres_list = Genre.objects.all()
-	context = {'new_books': book_list, 'genres': genres_list}
+	if request.user.is_authenticated:
+		customer = request.user.person
+		order, created = Order.objects.get_or_create(user=customer, complete=False)
+		items = order.orderitem_set.all()
+	else:
+		items = []
+		order = {'get_cart_items': 0}
+	context = {'books': book_list, 'genres': genres_list, 'items': items, 'order': order}
 	return render(request, template_name='books.html', context=context)
 
 
@@ -65,6 +79,11 @@ def cart(request):
 
 
 def order_done(request):
+	customer = request.user.person
+	order, created = Order.objects.get_or_create(user=customer, complete=False)
+	order.complete = True
+	order.save()
+
 	return render(request, template_name='order_done.html')
 
 
@@ -101,18 +120,24 @@ def update_item(request):
 	book_id = data['bookId']
 	action = data['action']
 
-	print('Action: ', action)
-	print('bookId: ', book_id)
-
 	customer = request.user.person
 	book = Book.objects.get(id=book_id)
 	print(book)
+	print(action)
 	order, created = Order.objects.get_or_create(user=customer, complete=False)
 
 	order_item, created = OrderItem.objects.get_or_create(cart=order, book=book)
 
-	order_item.save()
+	print(book.amount)
+	if book.amount > 0:
+		order_item.save()
+		book.amount -= 1
+		book.save()
 	if action == 'remove':
 		order_item.delete()
+		book.amount +=1
+		book.save()
+	if action == 'reserve':
+		book, created = Reserved.objects.get_or_create(id_user=customer, id_book=book)
 
 	return JsonResponse('Item was added', safe=False)
