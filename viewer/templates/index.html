@@ -72,11 +72,11 @@
                               <ul>
                                  {% if user.is_authenticated %}
                                     <li><a href="#">User: {{user}}</a></li>
-                                    <li style="border-right: 1px solid #dcdcdc;"><a href="#">Logout</a></li>
+                                    <li style="border-right: 1px solid #dcdcdc;"><a href="{% url 'logout' %}">Logout</a></li>
                                     <li><a href="{% url 'cart' %}">Basket: <p style="display: inline; color: red">{{order.total_items }} books</p></a></li>
                                  {% else %}
-                                    <li><a href="#">Login</a></li>
-                                    <li><a class="custom-b" href="#">Sign up</a></li>
+                                    <li><a href="{% url 'login' %}">Login</a></li>
+                                    <li><a class="custom-b" href="{% url 'signup' %}">Sign up</a></li>
                                  {% endif %}
                               </ul>
                            </div>

@@ -17,23 +17,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from viewer.views import *
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", new_books, name='home'),
-    path("index/", new_books, name='home'),
-
-    path("book/<pk>/", book, name='book'),
-    path("books_page/", books_page, name='books_page'),
-    path("authors/", AuthorsView.as_view(), name='authors'),
-
-    path("cart/", cart, name='cart'),
-    path("order_done/", order_done, name='order_done'),
-    path("update_item/", update_item, name='update_item'),
-
+    path("", include('viewer.urls')),
+    path("", include('accounts.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
